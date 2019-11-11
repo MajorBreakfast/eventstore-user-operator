@@ -2,7 +2,7 @@
 
 The Event Store user operator creates Event Store users according to `EventStoreUser` resources.
 
-```
+```yaml
 apiVersion: josefbrandl.com/v1
 kind: EventStoreUser
 metadata:
@@ -25,7 +25,7 @@ Note: The `spec.eventStore` field should be considered immutable. Changing it, w
 
 The Event Store User operator is configured via the `/etc/eventstore-user-operator/config/config.yaml`:
 
-```
+```yaml
 eventStores:
   - name: my-eventstore
     url: http://my-eventstore.my-eventstore.svc.cluster.local
