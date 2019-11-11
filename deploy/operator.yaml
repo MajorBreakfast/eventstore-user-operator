@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eventstore-user-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: eventstore-user-operator
+  template:
+    metadata:
+      labels:
+        name: eventstore-user-operator
+    spec:
+      serviceAccountName: eventstore-user-operator
+      containers:
+        - name: eventstore-user-operator
+          image: localhost:5000/eventstore-user-operator:22
+          command:
+            - eventstore-user-operator
+          resources:
+            limits: { cpu: 1000m, memory: 300Mi }
+            requests: { cpu: 10m, memory: 100Mi }
+          env:
+            - name: WATCH_NAMESPACE
+              value: ""
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: EVENTSTORE_USER_OPERATOR_BASE_PATH
+              value: /etc/eventstore-user-operator
+            - name: OPERATOR_NAME
+              value: "eventstore-user-operator"
+          volumeMounts:
+            - name: config
+              mountPath: /etc/eventstore-user-operator/config
+              readOnly: true
+            - name: my-eventstore-credentials
+              mountPath: /etc/eventstore-user-operator/eventstore-credentials/my-eventstore
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: eventstore-user-operator
+        - name: my-eventstore-credentials
+          secret:
+            secretName: my-eventstore-admin-credentials

@@ -1,0 +1,3 @@
+eventStores:
+  - name: my-eventstore
+    url: http://my-eventstore.my-eventstore.svc.cluster.local
